@@ -1,0 +1,6 @@
+document.addEventListener('DOMContentLoaded',async()=>{
+ const el=document.getElementById('featured-tours');
+ if(el){try{const {tours}=await api('/excursions');const featured=tours.filter(t=>t.featured).slice(0,4);el.innerHTML=(featured.length?featured:tours.slice(0,4)).map(tourCard).join('')||'<p>Nessuna escursione disponibile al momento.</p>'}catch(e){el.textContent='Impossibile caricare le escursioni.'}}
+ const reviews=document.getElementById('home-reviews');
+ if(reviews){try{const {reviews:items}=await api('/reviews');reviews.innerHTML=items.length?items.slice(0,3).map(r=>`<article class="review-card"><div class="review-stars">${'★'.repeat(r.rating)}${'☆'.repeat(5-r.rating)}</div><p>“${escapeHtml(r.comment)}”</p>${r.photos?.length?`<div class="review-photos">${r.photos.map(src=>`<img src="${escapeHtml(src)}" alt="Foto condivisa da un cliente" loading="lazy">`).join('')}</div>`:''}<b>${escapeHtml(r.customer_name)}</b>${r.verified?'<span class="verified-review">✓ Viaggiatore verificato</span>':''}</article>`).join(''):'<article class="review-card"><div class="review-stars">★★★★★</div><p>Le prime recensioni dei viaggiatori appariranno qui dopo la loro approvazione.</p><b>La tua esperienza conta</b></article>'}catch(e){reviews.textContent='Le recensioni non sono disponibili al momento.'}}
+});
